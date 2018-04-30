@@ -6,35 +6,33 @@ import { catchError, tap } from 'rxjs/operators';
 
 import {User} from "../types/user";
 
-// const authHttpOptions = {
-// 	headers: new HttpHeaders({ 'Authorization': 'application/x-www-form-urlencoded' })
-// };
+const apiUrl = 'http://api.shawnnolan.com/';
 
 @Injectable()
 export class DemoService {
-	apiUrl = 'http://api.shawnnolan.com/';
-
 	constructor(private http: HttpClient) {}
 
-	// Uses http.get() to load data from a single API endpoint
-	getPost() {
-		return this.http.get('http://api.shawnnolan.com/wp-json/wp/v2/posts/1');
+	getPhrases(token) {
+		return this.http.get(apiUrl + 'wp-json/ngapp/v1/phrases', this.bearerAuth(token));
 	}
 
-	/** POST: add a new hero to the server */
-	loginUser (hero: User): Observable<User> {
-		return this.http.post<User>(this.apiUrl + 'wp-json/jwt-auth/v1/token', hero).pipe(
-			tap((hero: User) => console.log(`hero token: ${hero.token}`)),
+	loginUser (usr: User): Observable<User> {
+		return this.http.post<User>(apiUrl + 'wp-json/jwt-auth/v1/token', usr).pipe(
+			tap((usr: User) => ''),
 			catchError(this.handleError<User>('failed to login.'))
 		);
 	}
 
-	validateToken(token) {
-		const authHttpOptions = {
+	// @todo: convert to static method
+	bearerAuth(token) {
+		return {
 			headers: new HttpHeaders({ 'Authorization': 'Bearer ' + token })
 		};
-		return this.http.post(this.apiUrl + 'wp-json/jwt-auth/v1/token/validate', {}, authHttpOptions).pipe(
-			tap((token) => console.log(`hero validate: ${token}`)),
+	}
+
+	validateToken(token) {
+		return this.http.post(apiUrl + 'wp-json/jwt-auth/v1/token/validate', {}, this.bearerAuth(token)).pipe(
+			tap((token) => ''),
 			catchError(this.handleError('token failed.'))
 		);
 	}
