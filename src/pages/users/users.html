@@ -23,17 +23,23 @@
 				<!--{{ item }}-->
 			<!--</button>-->
 		<!--</ion-list>-->
+
 		<div class="row header">
 			<div class="col">Site</div>
 			<div class="col">Email</div>
 			<div class="col">Password</div>
-			<div class="col"></div>
 		</div>
 		<div class="row" *ngFor="let pr of phrases">
 			<div class="col">{{pr.site}}</div>
 			<div class="col">{{pr.user}}</div>
-			<div class="col"><input type="password" value="{{pr.pword}}" /><a class="show" href="#">{{showHide}}</a> </div>
+			<div class="col">
+				<input type="{{showHideAtt}}" value="{{pr.pword}}" />
+				<a class="show" href="#" (click)="clickShowHide()">{{showHide}}</a>
+			</div>
 		</div>
+	</div>
+	<div class="alert-head" *ngIf="loading">
+		{{loading}}
 	</div>
 	<form *ngIf="!phrases" #loginForm="ngForm" (ngSubmit)="getUserLogin(loginForm)">
 		<ion-list>
@@ -48,6 +54,6 @@
 			</ion-item>
 
 		</ion-list>
-		<button type="submit">Sign Up</button>
+		<button class="submit-btn" type="submit">Sign Up</button>
 	</form>
 </ion-content>

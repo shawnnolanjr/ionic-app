@@ -4,10 +4,11 @@ import {Observable} from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { catchError, tap } from 'rxjs/operators';
 import {User} from "../types/user";
+import { isDevMode } from '@angular/core';
 import { environment } from '../environment';
 let apiUrl = environment.prodApiUrl;
-if(environment.env === 'development')
-	apiUrl = environment.localApiUrl;
+// if(environment.env === 'development')
+// 	apiUrl = environment.localApiUrl;
 
 @Injectable()
 export class DemoService {

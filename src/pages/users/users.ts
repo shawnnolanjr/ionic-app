@@ -18,6 +18,8 @@ export class UsersPage {
 	public showHide: string;
 	public searchQuery: string = '';
 	public items: string[];
+	public showHideAtt: string;
+	public loading: string;
 
 	constructor(
 		public navCtrl: NavController,
@@ -26,12 +28,29 @@ export class UsersPage {
 		// private router: Route
 	) {
 		this.showHide = 'Show';
+		this.showHideAtt = 'password';
 	}
 
 	ionViewDidLoad() {
 	}
 
+	copyToClipboard(text) {
+		window.prompt("Copy to clipboard: Ctrl+C || cmd+C, Enter", text);
+	}
+
+	clickShowHide() {
+		let inputAttr = this.showHideAtt;
+		if(inputAttr == 'text') {
+			this.showHide = 'Show';
+			this.showHideAtt = 'password';
+		} else {
+			this.showHide = 'Hide';
+			this.showHideAtt = 'text';
+		}
+	}
+
 	getUserLogin(user: NgForm) {
+		this.loading = 'Loading content';
 		let userData = new User();
 		userData.username = user.value.username;
 		userData.password = user.value.password;
@@ -41,6 +60,9 @@ export class UsersPage {
 					if (usr && usr.token) {
 						this.getTokenValidate(usr.token);
 						this.getPhrases(usr.token);
+						this.loading = null;
+					} else {
+						this.loading = 'something went wrong';
 					}
 				});
 		}
