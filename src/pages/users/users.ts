@@ -20,6 +20,7 @@ export class UsersPage {
 	public items: string[];
 	public showHideAtt: string;
 	public loading: string;
+	public user: object;
 
 	constructor(
 		public navCtrl: NavController,
@@ -32,11 +33,25 @@ export class UsersPage {
 	}
 
 	ionViewDidLoad() {
+		this.setUser();
 	}
 
-	copyToClipboard(text) {
-		window.prompt("Copy to clipboard: Ctrl+C || cmd+C, Enter", text);
+	setUser():void {
+		let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+		let token = null;
+		if(currentUser && currentUser.token) {
+			token = currentUser.token; // your token
+			this.getPhrases(token);
+			this.user = {
+				username: currentUser.username,
+				token: currentUser.token
+			};
+		}
 	}
+
+	// copyToClipboard(text) {
+	// 	window.prompt("Copy to clipboard: Ctrl+C || cmd+C, Enter", text);
+	// }
 
 	clickShowHide() {
 		let inputAttr = this.showHideAtt;
@@ -61,6 +76,8 @@ export class UsersPage {
 						this.getTokenValidate(usr.token);
 						this.getPhrases(usr.token);
 						this.loading = null;
+						localStorage.setItem('currentUser', JSON.stringify({ token: usr.token, username: userData.username }));
+						this.setUser();
 					} else {
 						this.loading = 'something went wrong';
 					}
@@ -71,9 +88,7 @@ export class UsersPage {
 	getTokenValidate(token): void {
 		if (token) {
 			this.demoService.validateToken(token)
-				.subscribe(toke => {
-					// @todo: need to add token to cookie/session or something in app.interceptor.ts
-				});
+				.subscribe(toke => { });
 		}
 	}
 

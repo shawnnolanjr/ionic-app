@@ -7,14 +7,14 @@
 <ion-header>
 
 	<ion-navbar>
-		<ion-title>users</ion-title>
+		<ion-title>users, <span *ngIf="user">hello {{user.username}}</span></ion-title>
 	</ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-	<div *ngIf="phrases">
+	<div *ngIf="phrases && user">
 		<!-- @todo: need to finish search bar -->
 		<!--<ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>-->
 		<!-- // @todo: convert to ion-list -->
@@ -41,7 +41,7 @@
 	<div class="alert-head" *ngIf="loading">
 		{{loading}}
 	</div>
-	<form *ngIf="!phrases" #loginForm="ngForm" (ngSubmit)="getUserLogin(loginForm)">
+	<form *ngIf="!user" #loginForm="ngForm" (ngSubmit)="getUserLogin(loginForm)">
 		<ion-list>
 			<ion-item>
 				<ion-label fixed>Username</ion-label>
